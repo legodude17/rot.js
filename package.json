@@ -1,0 +1,35 @@
+{
+  "name": "rot.js",
+  "version": "0.7.0-dev",
+  "description": "ROguelike Toolkit for JS",
+  "main": "dist/rot,js",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legodude17/rot.js.git"
+  },
+  "keywords": [
+    "Roguelike",
+    "game",
+    "library",
+    "toolkit"
+  ],
+  "author": "JDB, Ondras",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/legodude17/rot.js/issues"
+  },
+  "homepage": "https://github.com/legodude17/rot.js#readme",
+  "devDependencies": {
+    "eslint": "^5.7.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "rollup": "^0.66.6"
+  }
+}
