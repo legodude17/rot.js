@@ -1,5 +1,5 @@
 import Path from './path';
-import { extend } from '../js/function';
+import extend from '../js/function';
 
 /**
  * @class Simplified A* algorithm: all edges have a value of 1

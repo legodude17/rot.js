@@ -1,20 +1,21 @@
+import { getUniform } from '../rng';
 /**
  * @returns {any} Randomly picked item, null when length=0
  */
-Array.prototype.random = Array.prototype.random || function () {
-  if (!this.length) { return null; }
-  return this[Math.floor(ROT.RNG.getUniform() * this.length)];
-};
+export function pickRandom(arr) {
+  if (!arr.length) { return null; }
+  return arr[Math.floor(getUniform() * arr.length)];
+}
 
 /**
  * @returns {array} New array with randomized items
  */
-Array.prototype.randomize = Array.prototype.randomize || function () {
+export function randomizeArray(arr) {
   const result = [];
-  const clone = this.slice();
+  const clone = arr.slice();
   while (clone.length) {
-    const index = clone.indexOf(clone.random());
+    const index = clone.indexOf(pickRandom(clone));
     result.push(clone.splice(index, 1)[0]);
   }
   return result;
-};
+}

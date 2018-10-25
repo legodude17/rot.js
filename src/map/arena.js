@@ -1,5 +1,5 @@
 import Map from './map';
-import { extend } from '../js/function';
+import extend from '../js/function';
 
 /**
  * @class Simple empty rectangular room

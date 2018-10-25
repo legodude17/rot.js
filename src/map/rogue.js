@@ -1,6 +1,6 @@
 import Map from './map';
-import { extend } from '../js/function';
-import { randomize } from '../js/array';
+import extend from '../js/function';
+import { randomizeArray } from '../js/array';
 import { getUniform, getUniformInt } from '../rng';
 import { DIRS } from '../rot';
 
@@ -103,7 +103,7 @@ RogueMap.prototype._connectRooms = function _connectRooms() {
   let dirToCheck;
   do {
     // var dirToCheck = [0, 1, 2, 3, 4, 5, 6, 7];
-    dirToCheck = randomize([0, 2, 4, 6]);
+    dirToCheck = randomizeArray([0, 2, 4, 6]);
 
     do {
       found = false;
@@ -143,7 +143,7 @@ RogueMap.prototype._connectUnconnectedRooms = function _connectUnconnectedRooms(
   const cw = this._options.cellWidth;
   const ch = this._options.cellHeight;
 
-  this.connectedCells = this.connectedCells.randomize();
+  this.connectedCells = randomizeArray(this.connectedCells);
   let room;
   let otherRoom;
   let validRoom;
@@ -153,8 +153,7 @@ RogueMap.prototype._connectUnconnectedRooms = function _connectUnconnectedRooms(
       room = this.rooms[i][j];
 
       if (room.connections.length === 0) {
-        let directions = [0, 2, 4, 6];
-        directions = directions.randomize();
+        const directions = randomizeArray([0, 2, 4, 6]);
 
         validRoom = false;
 

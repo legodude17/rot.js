@@ -1,4 +1,4 @@
-import { extend } from '../js/function';
+import extend from '../js/function';
 import { getUniform, getUniformInt } from '../rng';
 
 /**

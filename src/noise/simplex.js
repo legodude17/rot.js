@@ -1,6 +1,7 @@
 import Noise from './noise';
-import { extend } from '../js/function';
-import { mod } from '../js/number';
+import extend from '../js/function';
+import mod from '../js/number';
+import { randomizeArray } from '../js/array';
 
 /**
  * A simple 2d implementation of simplex noise by Ondrej Zara
@@ -35,7 +36,7 @@ export default function Simplex(gradients) {
   let permutations = [];
   const count = gradients || 256;
   for (let i = 0; i < count; i++) { permutations.push(i); }
-  permutations = permutations.randomize();
+  permutations = randomizeArray(permutations);
 
   this._perms = [];
   this._indexes = [];

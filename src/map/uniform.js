@@ -1,6 +1,7 @@
 import DungeonMap from './dungeon';
-import { extend } from '../js/function';
+import extend from '../js/function';
 import { Corridor } from './features';
+import { randomizeArray, pickRandom } from '../js/array';
 
 /**
  * @class DungeonMap generator which tries to fill the space evenly. Generates independent rooms and tries to connect them.
@@ -111,13 +112,13 @@ UniformDungeonMap.prototype._generateCorridors = function _generateCorridors() {
       room.create(this._digCallback);
     }
 
-    this._unconnected = this._rooms.slice().randomize();
+    this._unconnected = randomizeArray(this._rooms.slice());
     this._connected = [];
     if (this._unconnected.length) { this._connected.push(this._unconnected.pop()); } /* first one is always connected */
 
     while (true) {
       /* 1. pick random connected room */
-      const connected = this._connected.random();
+      const connected = pickRandom(this._connected);
 
       /* 2. find closest unconnected */
       const room1 = this._closestRoom(this._unconnected, connected);
@@ -300,7 +301,7 @@ UniformDungeonMap.prototype._placeInWall = function _placeInWall(room, dirIndex)
   for (let i = avail.length - 1; i >= 0; i--) {
     if (!avail[i]) { avail.splice(i, 1); }
   }
-  return (avail.length ? avail.random() : null);
+  return (avail.length ? pickRandom(avail) : null);
 };
 
 /**

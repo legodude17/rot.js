@@ -1,4 +1,5 @@
 import { getNormal } from './rng';
+import { lpad } from './js/string';
 
 /**
   * Add two or more colors
@@ -187,7 +188,7 @@ export function toRGB(color) {
 export function toHex(color) {
   const parts = [];
   for (let i = 0; i < 3; i++) {
-    parts.push(this._clamp(color[i]).toString(16).lpad('0', 2));
+    parts.push(lpad(this._clamp(color[i]).toString(16), '0', 2));
   }
   return `#${parts.join('')}`;
 }

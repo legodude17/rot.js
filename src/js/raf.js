@@ -1,15 +1,13 @@
-if (typeof window !== 'undefined') {
-  window.requestAnimationFrame =		window.requestAnimationFrame
-		|| window.mozRequestAnimationFrame
-		|| window.webkitRequestAnimationFrame
-		|| window.oRequestAnimationFrame
-		|| window.msRequestAnimationFrame
-		|| function (cb) { return setTimeout(() => { cb(Date.now()); }, 1000 / 60); };
+export const requestAnimationFrame = window.requestAnimationFrame
+  || window.mozRequestAnimationFrame
+  || window.webkitRequestAnimationFrame
+  || window.oRequestAnimationFrame
+  || window.msRequestAnimationFrame
+  || function requestAnimationFramePolyfill(cb) { return setTimeout(() => { cb(Date.now()); }, 1000 / 60); };
 
-  window.cancelAnimationFrame =		window.cancelAnimationFrame
-		|| window.mozCancelAnimationFrame
-		|| window.webkitCancelAnimationFrame
-		|| window.oCancelAnimationFrame
-		|| window.msCancelAnimationFrame
-		|| function (id) { return clearTimeout(id); };
-}
+export const cancelAnimationFrame = window.cancelAnimationFrame
+  || window.mozCancelAnimationFrame
+  || window.webkitCancelAnimationFrame
+  || window.oCancelAnimationFrame
+  || window.msCancelAnimationFrame
+  || function cancelAnimationFramePolyfill(id) { return clearTimeout(id); };

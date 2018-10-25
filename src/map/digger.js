@@ -1,7 +1,8 @@
 import Dungeon from './dungeon';
-import { extend } from '../js/function';
+import extend from '../js/function';
 import { getWeightedValue } from '../rng';
 import { DIRS } from '../rot';
+import { pickRandom } from '../js/array';
 
 /**
  * @class Random dungeon generator using human-like digging patterns.
@@ -154,7 +155,7 @@ DiggerMap.prototype._findWall = function _findWall() {
   const arr = (prio2.length ? prio2 : prio1);
   if (!arr.length) { return null; } /* no walls :/ */
 
-  const id = arr.sort().random(); // sort to make the order deterministic
+  const id = pickRandom(arr.sort()); // sort to make the order deterministic
   delete this._walls[id];
 
   return id;

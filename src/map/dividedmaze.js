@@ -1,5 +1,6 @@
 import Map from './map';
-import { extend } from '../js/function';
+import extend from '../js/function';
+import { pickRandom } from '../js/array';
 
 /**
  * @class Recursively divided maze, http://en.wikipedia.org/wiki/Maze_generation_algorithm#Recursive_division_method
@@ -64,8 +65,8 @@ DividedMaze.prototype._partitionRoom = function _partitionRoom(room) {
 
   if (!availX.length || !availY.length) { return; }
 
-  const x = availX.random();
-  const y = availY.random();
+  const x = pickRandom(availX);
+  const y = pickRandom(availY);
 
   this._map[x][y] = 1;
 
@@ -95,11 +96,11 @@ DividedMaze.prototype._partitionRoom = function _partitionRoom(room) {
     w.push([x, j]);
   }
 
-  const solid = walls.random();
+  const solid = pickRandom(walls);
   for (let i = 0; i < walls.length; i++) {
     w = walls[i];
     if (w !== solid) {
-      const hole = w.random();
+      const hole = pickRandom(w);
       this._map[hole[0]][hole[1]] = 0;
     }
   }

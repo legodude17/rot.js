@@ -1,5 +1,5 @@
 import Map from './map';
-import { extend } from '../js/function';
+import extend from '../js/function';
 import { DIRS } from '../rot';
 import { getUniform, getUniformInt } from '../rng';
 
