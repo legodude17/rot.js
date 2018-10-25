@@ -13,7 +13,11 @@
     ],
     "indent": ["error", 2],
     "no-param-reassign": "off",
-    "no-plusplus": "off"
+    "no-plusplus": "off",
+    "no-bitwise": "off",
+    "no-mixed-operators": "off",
+    "camelcase": "off",
+    "no-var": "off",
   },
   "env": {
     "browser": true

@@ -2,7 +2,7 @@
  * @class Abstract display backend module
  * @private
  */
-ROT.Display.Backend = function (context) {
+ROT.Display.Backend = function ROT_Display_Backend(context) {
   this._context = context;
 };
 

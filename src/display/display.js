@@ -18,7 +18,7 @@
  * @param {image} [options.tileSet=null]
  * @param {image} [options.tileColorize=false]
  */
-ROT.Display = function (options) {
+ROT.Display = function ROT_Display(options) {
   const canvas = document.createElement('canvas');
   this._context = canvas.getContext('2d');
   this._data = {};
@@ -76,7 +76,7 @@ ROT.Display.prototype.clear = function () {
 /**
  * @see ROT.Display
  */
-ROT.Display.prototype.setOptions = function (options) {
+ROT.Display.prototype.setOptions = function ROT_Display_prototype_setOptions(options) {
   for (const p in options) { this._options[p] = options[p]; }
   if (options.width || options.height || options.fontSize || options.fontFamily || options.spacing || options.layout) {
     if (options.layout) {
@@ -98,7 +98,7 @@ ROT.Display.prototype.setOptions = function (options) {
  * Returns currently set options
  * @returns {object} Current options object
  */
-ROT.Display.prototype.getOptions = function () {
+ROT.Display.prototype.getOptions = function ROT_Display_prototype_getOptions() {
   return this._options;
 };
 
@@ -106,7 +106,7 @@ ROT.Display.prototype.getOptions = function () {
  * Returns the DOM node of this display
  * @returns {node} DOM node
  */
-ROT.Display.prototype.getContainer = function () {
+ROT.Display.prototype.getContainer = function ROT_Display_prototype_getContainer() {
   return this._context.canvas;
 };
 
@@ -181,7 +181,7 @@ ROT.Display.prototype.draw = function (x, y, ch, fg, bg) {
  * @param {int} [maxWidth] wrap at what width?
  * @returns {int} lines drawn
  */
-ROT.Display.prototype.drawText = function (x, y, text, maxWidth) {
+ROT.Display.prototype.drawText = function ROT_Display_prototype_drawText(x, y, text, maxWidth) {
   let fg = null;
   let bg = null;
   let cx = x;
@@ -238,7 +238,7 @@ ROT.Display.prototype.drawText = function (x, y, text, maxWidth) {
 /**
  * Timer tick: update dirty parts
  */
-ROT.Display.prototype._tick = function () {
+ROT.Display.prototype._tick = function ROT_Display_prototype__tick() {
   requestAnimationFrame(this._tick);
 
   if (!this._dirty) { return; }
@@ -263,7 +263,7 @@ ROT.Display.prototype._tick = function () {
  * @param {string} key What to draw
  * @param {bool} clearBefore Is it necessary to clean before?
  */
-ROT.Display.prototype._draw = function (key, clearBefore) {
+ROT.Display.prototype._draw = function ROT_Display_prototype__draw(key, clearBefore) {
   const data = this._data[key];
   if (data[4] != this._options.bg) { clearBefore = true; }
 
