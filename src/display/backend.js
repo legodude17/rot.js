@@ -2,21 +2,16 @@
  * @class Abstract display backend module
  * @private
  */
-ROT.Display.Backend = function ROT_Display_Backend(context) {
+export default function DisplayBackend(context) {
   this._context = context;
-};
+}
 
-ROT.Display.Backend.prototype.compute = function (options) {
-};
+DisplayBackend.prototype.compute = function compute(options) {}; // eslint-disable-line no-unused-vars
 
-ROT.Display.Backend.prototype.draw = function (data, clearBefore) {
-};
+DisplayBackend.prototype.draw = function draw(data, clearBefore) {}; // eslint-disable-line no-unused-vars
 
-ROT.Display.Backend.prototype.computeSize = function (availWidth, availHeight) {
-};
+DisplayBackend.prototype.computeSize = function computeSize(availWidth, availHeight) {}; // eslint-disable-line no-unused-vars
 
-ROT.Display.Backend.prototype.computeFontSize = function (availWidth, availHeight) {
-};
+DisplayBackend.prototype.computeFontSize = function computeFontSize(availWidth, availHeight) {}; // eslint-disable-line no-unused-vars
 
-ROT.Display.Backend.prototype.eventToPosition = function (x, y) {
-};
+DisplayBackend.prototype.eventToPosition = function eventToPosition(x, y) {}; // eslint-disable-line no-unused-vars

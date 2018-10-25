@@ -1,8 +1,16 @@
+import {
+  tokenize, TYPE_TEXT, TYPE_BG, TYPE_FG, TYPE_NEWLINE,
+} from '../text';
+
+import HexDisplayBackend from './hex';
+import RectDisplayBackend from './rect';
+import TileDisplayBackend from './tile';
+
 /**
  * @class Visual map display
  * @param {object} [options]
- * @param {int} [options.width=ROT.DEFAULT_WIDTH]
- * @param {int} [options.height=ROT.DEFAULT_HEIGHT]
+ * @param {int} [options.width=DEFAULT_WIDTH]
+ * @param {int} [options.height=DEFAULT_HEIGHT]
  * @param {int} [options.fontSize=15]
  * @param {string} [options.fontFamily="monospace"]
  * @param {string} [options.fontStyle=""] bold/italic/none/both
@@ -18,7 +26,7 @@
  * @param {image} [options.tileSet=null]
  * @param {image} [options.tileColorize=false]
  */
-ROT.Display = function ROT_Display(options) {
+export default function Display(options) {
   const canvas = document.createElement('canvas');
   this._context = canvas.getContext('2d');
   this._data = {};
@@ -27,8 +35,6 @@ ROT.Display = function ROT_Display(options) {
   this._backend = null;
 
   const defaultOptions = {
-    width: ROT.DEFAULT_WIDTH,
-    height: ROT.DEFAULT_HEIGHT,
     transpose: false,
     layout: 'rect',
     fontSize: 15,
@@ -46,13 +52,13 @@ ROT.Display = function ROT_Display(options) {
     tileColorize: false,
     termColor: 'xterm',
   };
-  for (const p in options) { defaultOptions[p] = options[p]; }
+  Object.assign(defaultOptions, options);
   this.setOptions(defaultOptions);
   this.DEBUG = this.DEBUG.bind(this);
 
   this._tick = this._tick.bind(this);
   requestAnimationFrame(this._tick);
-};
+}
 
 /**
  * Debug helper, ideal as a map generator callback. Always bound to this.
@@ -60,7 +66,7 @@ ROT.Display = function ROT_Display(options) {
  * @param {int} y
  * @param {int} what
  */
-ROT.Display.prototype.DEBUG = function (x, y, what) {
+Display.prototype.DEBUG = function DEBUG(x, y, what) {
   const colors = [this._options.bg, this._options.fg];
   this.draw(x, y, null, null, colors[what % colors.length]);
 };
@@ -68,22 +74,25 @@ ROT.Display.prototype.DEBUG = function (x, y, what) {
 /**
  * Clear the whole display (cover it with background color)
  */
-ROT.Display.prototype.clear = function () {
+Display.prototype.clear = function clear() {
   this._data = {};
   this._dirty = true;
 };
 
 /**
- * @see ROT.Display
+ * @see Display
  */
-ROT.Display.prototype.setOptions = function ROT_Display_prototype_setOptions(options) {
-  for (const p in options) { this._options[p] = options[p]; }
+Display.prototype.setOptions = function setOptions(options) {
+  Object.assign(this._options, options);
   if (options.width || options.height || options.fontSize || options.fontFamily || options.spacing || options.layout) {
     if (options.layout) {
-      this._backend = new ROT.Display[options.layout.capitalize()](this._context);
+      const Backend = this._getBackend(options.layout.toLowerCase());
+      this._backend = new Backend(this._context);
     }
 
-    const font = `${(this._options.fontStyle ? `${this._options.fontStyle} ` : '') + this._options.fontSize}px ${this._options.fontFamily}`;
+    const font = `${(this._options.fontStyle
+      ? `${this._options.fontStyle} `
+      : '') + this._options.fontSize}px ${this._options.fontFamily}`;
     this._context.font = font;
     this._backend.compute(this._options);
     this._context.font = font;
@@ -94,11 +103,23 @@ ROT.Display.prototype.setOptions = function ROT_Display_prototype_setOptions(opt
   return this;
 };
 
+Display.prototype._getBackend = function _getBackend(name) {
+  switch (name) {
+  case 'hex':
+    return HexDisplayBackend;
+  case 'rect':
+    return RectDisplayBackend;
+  case 'tile':
+    return TileDisplayBackend;
+  default: throw new Error('Unrecognized backend');
+  }
+};
+
 /**
  * Returns currently set options
  * @returns {object} Current options object
  */
-ROT.Display.prototype.getOptions = function ROT_Display_prototype_getOptions() {
+Display.prototype.getOptions = function getOptions() {
   return this._options;
 };
 
@@ -106,7 +127,7 @@ ROT.Display.prototype.getOptions = function ROT_Display_prototype_getOptions() {
  * Returns the DOM node of this display
  * @returns {node} DOM node
  */
-ROT.Display.prototype.getContainer = function ROT_Display_prototype_getContainer() {
+Display.prototype.getContainer = function getContainer() {
   return this._context.canvas;
 };
 
@@ -116,7 +137,7 @@ ROT.Display.prototype.getContainer = function ROT_Display_prototype_getContainer
  * @param {int} availHeight Maximum allowed pixel height
  * @returns {int[2]} cellWidth,cellHeight
  */
-ROT.Display.prototype.computeSize = function (availWidth, availHeight) {
+Display.prototype.computeSize = function computeSize(availWidth, availHeight) {
   return this._backend.computeSize(availWidth, availHeight, this._options);
 };
 
@@ -126,7 +147,7 @@ ROT.Display.prototype.computeSize = function (availWidth, availHeight) {
  * @param {int} availHeight Maximum allowed pixel height
  * @returns {int} fontSize
  */
-ROT.Display.prototype.computeFontSize = function (availWidth, availHeight) {
+Display.prototype.computeFontSize = function computeFontSize(availWidth, availHeight) {
   return this._backend.computeFontSize(availWidth, availHeight, this._options);
 };
 
@@ -135,13 +156,15 @@ ROT.Display.prototype.computeFontSize = function (availWidth, availHeight) {
  * @param {Event} e event
  * @returns {int[2]} -1 for values outside of the canvas
  */
-ROT.Display.prototype.eventToPosition = function (e) {
+Display.prototype.eventToPosition = function eventToPosition(e) {
+  let x;
+  let y;
   if (e.touches) {
-    var x = e.touches[0].clientX;
-    var y = e.touches[0].clientY;
+    x = e.touches[0].clientX;
+    y = e.touches[0].clientY;
   } else {
-    var x = e.clientX;
-    var y = e.clientY;
+    x = e.clientX;
+    y = e.clientY;
   }
 
   const rect = this._context.canvas.getBoundingClientRect();
@@ -163,9 +186,9 @@ ROT.Display.prototype.eventToPosition = function (e) {
  * @param {string} [fg] foreground color
  * @param {string} [bg] background color
  */
-ROT.Display.prototype.draw = function (x, y, ch, fg, bg) {
-  if (!fg) { fg = this._options.fg; }
-  if (!bg) { bg = this._options.bg; }
+Display.prototype.draw = function draw(x, y, ch, fg, bg) {
+  if (!fg) { ({ fg } = this._options); }
+  if (!bg) { ({ bg } = this._options); }
   this._data[`${x},${y}`] = [x, y, ch, fg, bg];
 
   if (this._dirty === true) { return; } /* will already redraw everything */
@@ -181,7 +204,7 @@ ROT.Display.prototype.draw = function (x, y, ch, fg, bg) {
  * @param {int} [maxWidth] wrap at what width?
  * @returns {int} lines drawn
  */
-ROT.Display.prototype.drawText = function ROT_Display_prototype_drawText(x, y, text, maxWidth) {
+Display.prototype.drawText = function drawText(x, y, text, maxWidth) {
   let fg = null;
   let bg = null;
   let cx = x;
@@ -189,21 +212,23 @@ ROT.Display.prototype.drawText = function ROT_Display_prototype_drawText(x, y, t
   let lines = 1;
   if (!maxWidth) { maxWidth = this._options.width - x; }
 
-  const tokens = ROT.Text.tokenize(text, maxWidth);
+  const tokens = tokenize(text, maxWidth);
 
   while (tokens.length) { /* interpret tokenized opcode stream */
     const token = tokens.shift();
     switch (token.type) {
-    case ROT.Text.TYPE_TEXT:
-      var isSpace = false; var isPrevSpace = false; var isFullWidth = false; var
-        isPrevFullWidth = false;
+    case TYPE_TEXT: {
+      let isSpace = false;
+      let isPrevSpace = false;
+      let isFullWidth = false;
+      let isPrevFullWidth = false;
       for (let i = 0; i < token.value.length; i++) {
         const cc = token.value.charCodeAt(i);
         const c = token.value.charAt(i);
         // Assign to `true` when the current char is full-width.
         isFullWidth = (cc > 0xff00 && cc < 0xff61) || (cc > 0xffdc && cc < 0xffe8) || cc > 0xffee;
         // Current char is space, whatever full-width or half-width both are OK.
-        isSpace = (c.charCodeAt(0) == 0x20 || c.charCodeAt(0) == 0x3000);
+        isSpace = (c.charCodeAt(0) === 0x20 || c.charCodeAt(0) === 0x3000);
         // The previous char is full-width and
         // current char is nether half-width nor a space.
         if (isPrevFullWidth && !isFullWidth && !isSpace) { cx++; } // add an extra position
@@ -215,20 +240,23 @@ ROT.Display.prototype.drawText = function ROT_Display_prototype_drawText(x, y, t
         isPrevFullWidth = isFullWidth;
       }
       break;
+    }
 
-    case ROT.Text.TYPE_FG:
+    case TYPE_FG:
       fg = token.value || null;
       break;
 
-    case ROT.Text.TYPE_BG:
+    case TYPE_BG:
       bg = token.value || null;
       break;
 
-    case ROT.Text.TYPE_NEWLINE:
+    case TYPE_NEWLINE:
       cx = x;
       cy++;
       lines++;
       break;
+
+    default: break;
     }
   }
 
@@ -238,7 +266,7 @@ ROT.Display.prototype.drawText = function ROT_Display_prototype_drawText(x, y, t
 /**
  * Timer tick: update dirty parts
  */
-ROT.Display.prototype._tick = function ROT_Display_prototype__tick() {
+Display.prototype._tick = function _tick() {
   requestAnimationFrame(this._tick);
 
   if (!this._dirty) { return; }
@@ -248,11 +276,15 @@ ROT.Display.prototype._tick = function ROT_Display_prototype__tick() {
     this._context.fillRect(0, 0, this._context.canvas.width, this._context.canvas.height);
 
     for (const id in this._data) { /* redraw cached data */
-      this._draw(id, false);
+      if (this._data.hasOwnProperty(id)) {
+        this._draw(id, false);
+      }
     }
   } else { /* draw only dirty */
     for (const key in this._dirty) {
-      this._draw(key, true);
+      if (this._dirty.hasOwnProperty(key)) {
+        this._draw(key, true);
+      }
     }
   }
 
@@ -263,9 +295,9 @@ ROT.Display.prototype._tick = function ROT_Display_prototype__tick() {
  * @param {string} key What to draw
  * @param {bool} clearBefore Is it necessary to clean before?
  */
-ROT.Display.prototype._draw = function ROT_Display_prototype__draw(key, clearBefore) {
+Display.prototype._draw = function _draw(key, clearBefore) {
   const data = this._data[key];
-  if (data[4] != this._options.bg) { clearBefore = true; }
+  if (data[4] !== this._options.bg) { clearBefore = true; }
 
   this._backend.draw(data, clearBefore);
 };

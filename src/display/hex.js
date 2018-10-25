@@ -1,18 +1,22 @@
+import DisplayBackend from './backend';
+import extend from '../js/function';
+import mod from '../js/number';
+
 /**
  * @class Hexagonal backend
  * @private
  */
-ROT.Display.Hex = function (context) {
-  ROT.Display.Backend.call(this, context);
+export default function HexDisplayBackend(context) {
+  DisplayBackend.call(this, context);
 
   this._spacingX = 0;
   this._spacingY = 0;
   this._hexSize = 0;
   this._options = {};
-};
-ROT.Display.Hex.extend(ROT.Display.Backend);
+}
+extend(DisplayBackend, HexDisplayBackend);
 
-ROT.Display.Hex.prototype.compute = function (options) {
+HexDisplayBackend.prototype.compute = function compute(options) {
   this._options = options;
 
   /* FIXME char size computation does not respect transposed hexes */
@@ -20,24 +24,22 @@ ROT.Display.Hex.prototype.compute = function (options) {
   this._hexSize = Math.floor(options.spacing * (options.fontSize + charWidth / Math.sqrt(3)) / 2);
   this._spacingX = this._hexSize * Math.sqrt(3) / 2;
   this._spacingY = this._hexSize * 1.5;
+  let xprop;
+  let yprop;
 
   if (options.transpose) {
-    var xprop = 'height';
-    var yprop = 'width';
+    xprop = 'height';
+    yprop = 'width';
   } else {
-    var xprop = 'width';
-    var yprop = 'height';
+    xprop = 'width';
+    yprop = 'height';
   }
   this._context.canvas[xprop] = Math.ceil((options.width + 1) * this._spacingX);
   this._context.canvas[yprop] = Math.ceil((options.height - 1) * this._spacingY + 2 * this._hexSize);
 };
 
-ROT.Display.Hex.prototype.draw = function (data, clearBefore) {
-  const x = data[0];
-  const y = data[1];
-  const ch = data[2];
-  const fg = data[3];
-  const bg = data[4];
+HexDisplayBackend.prototype.draw = function draw(data, clearBefore) {
+  const [x, y, ch, fg, bg] = data;
 
   const px = [
     (x + 1) * this._spacingX,
@@ -60,7 +62,7 @@ ROT.Display.Hex.prototype.draw = function (data, clearBefore) {
   }
 };
 
-ROT.Display.Hex.prototype.computeSize = function (availWidth, availHeight) {
+HexDisplayBackend.prototype.computeSize = function computeSize(availWidth, availHeight) {
   if (this._options.transpose) {
     availWidth += availHeight;
     availHeight = availWidth - availHeight;
@@ -72,7 +74,7 @@ ROT.Display.Hex.prototype.computeSize = function (availWidth, availHeight) {
   return [width, height];
 };
 
-ROT.Display.Hex.prototype.computeFontSize = function (availWidth, availHeight) {
+HexDisplayBackend.prototype.computeFontSize = function computeFontSize(availWidth, availHeight) {
   if (this._options.transpose) {
     availWidth += availHeight;
     availHeight = availWidth - availHeight;
@@ -99,19 +101,20 @@ ROT.Display.Hex.prototype.computeFontSize = function (availWidth, availHeight) {
   return Math.ceil(fontSize) - 1;
 };
 
-ROT.Display.Hex.prototype.eventToPosition = function (x, y) {
+HexDisplayBackend.prototype.eventToPosition = function eventToPosition(x, y) {
+  let nodeSize;
   if (this._options.transpose) {
     x += y;
     y = x - y;
     x -= y;
-    var nodeSize = this._context.canvas.width;
+    nodeSize = this._context.canvas.width;
   } else {
-    var nodeSize = this._context.canvas.height;
+    nodeSize = this._context.canvas.height;
   }
   const size = nodeSize / this._options.height;
   y = Math.floor(y / size);
 
-  if (y.mod(2)) { /* odd row */
+  if (mod(y, 2)) { /* odd row */
     x -= this._spacingX;
     x = 1 + 2 * Math.floor(x / (2 * this._spacingX));
   } else {
@@ -124,28 +127,28 @@ ROT.Display.Hex.prototype.eventToPosition = function (x, y) {
 /**
  * Arguments are pixel values. If "transposed" mode is enabled, then these two are already swapped.
  */
-ROT.Display.Hex.prototype._fill = function (cx, cy) {
+HexDisplayBackend.prototype._fill = function _fill(cx, cy) {
   const a = this._hexSize;
   const b = this._options.border;
 
   this._context.beginPath();
 
   if (this._options.transpose) {
-    this._context.moveTo(cx - a + b,	cy);
-    this._context.lineTo(cx - a / 2 + b,	cy + this._spacingX - b);
-    this._context.lineTo(cx + a / 2 - b,	cy + this._spacingX - b);
-    this._context.lineTo(cx + a - b,	cy);
-    this._context.lineTo(cx + a / 2 - b,	cy - this._spacingX + b);
-    this._context.lineTo(cx - a / 2 + b,	cy - this._spacingX + b);
-    this._context.lineTo(cx - a + b,	cy);
+    this._context.moveTo(cx - a + b, cy);
+    this._context.lineTo(cx - a / 2 + b, cy + this._spacingX - b);
+    this._context.lineTo(cx + a / 2 - b, cy + this._spacingX - b);
+    this._context.lineTo(cx + a - b, cy);
+    this._context.lineTo(cx + a / 2 - b, cy - this._spacingX + b);
+    this._context.lineTo(cx - a / 2 + b, cy - this._spacingX + b);
+    this._context.lineTo(cx - a + b, cy);
   } else {
-    this._context.moveTo(cx,					cy - a + b);
-    this._context.lineTo(cx + this._spacingX - b,	cy - a / 2 + b);
-    this._context.lineTo(cx + this._spacingX - b,	cy + a / 2 - b);
-    this._context.lineTo(cx,					cy + a - b);
-    this._context.lineTo(cx - this._spacingX + b,	cy + a / 2 - b);
-    this._context.lineTo(cx - this._spacingX + b,	cy - a / 2 + b);
-    this._context.lineTo(cx,					cy - a + b);
+    this._context.moveTo(cx, cy - a + b);
+    this._context.lineTo(cx + this._spacingX - b, cy - a / 2 + b);
+    this._context.lineTo(cx + this._spacingX - b, cy + a / 2 - b);
+    this._context.lineTo(cx, cy + a - b);
+    this._context.lineTo(cx - this._spacingX + b, cy + a / 2 - b);
+    this._context.lineTo(cx - this._spacingX + b, cy - a / 2 + b);
+    this._context.lineTo(cx, cy - a + b);
   }
   this._context.fill();
 };

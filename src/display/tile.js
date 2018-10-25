@@ -1,16 +1,19 @@
+import RectDisplayBackend from './rect';
+import extend from '../js/function';
+
 /**
  * @class Tile backend
  * @private
  */
-ROT.Display.Tile = function (context) {
-  ROT.Display.Rect.call(this, context);
+export default function TileDisplayBackend(context) {
+  RectDisplayBackend.call(this, context);
 
   this._options = {};
   this._colorCanvas = document.createElement('canvas');
-};
-ROT.Display.Tile.extend(ROT.Display.Rect);
+}
+extend(RectDisplayBackend, TileDisplayBackend);
 
-ROT.Display.Tile.prototype.compute = function (options) {
+TileDisplayBackend.prototype.compute = function compute(options) {
   this._options = options;
   this._context.canvas.width = options.width * options.tileWidth;
   this._context.canvas.height = options.height * options.tileHeight;
@@ -18,15 +21,10 @@ ROT.Display.Tile.prototype.compute = function (options) {
   this._colorCanvas.height = options.tileHeight;
 };
 
-ROT.Display.Tile.prototype.draw = function (data, clearBefore) {
-  const x = data[0];
-  const y = data[1];
-  const ch = data[2];
-  var fg = data[3];
-  var bg = data[4];
+TileDisplayBackend.prototype.draw = function draw(data, clearBefore) {
+  const [x, y, ch, fg, bg] = data;
 
-  const tileWidth = this._options.tileWidth;
-  const tileHeight = this._options.tileHeight;
+  const { tileWidth, tileHeight } = this._options;
 
   if (clearBefore) {
     if (this._options.tileColorize) {
@@ -53,8 +51,8 @@ ROT.Display.Tile.prototype.draw = function (data, clearBefore) {
       context.globalCompositeOperation = 'source-over';
       context.clearRect(0, 0, tileWidth, tileHeight);
 
-      var fg = fgs[i];
-      var bg = bgs[i];
+      const fg = fgs[i];
+      const bg = bgs[i];
 
       context.drawImage(
         this._options.tileSet,
@@ -62,13 +60,13 @@ ROT.Display.Tile.prototype.draw = function (data, clearBefore) {
         0, 0, tileWidth, tileHeight,
       );
 
-      if (fg != 'transparent') {
+      if (fg !== 'transparent') {
         context.fillStyle = fg;
         context.globalCompositeOperation = 'source-atop';
         context.fillRect(0, 0, tileWidth, tileHeight);
       }
 
-      if (bg != 'transparent') {
+      if (bg !== 'transparent') {
         context.fillStyle = bg;
         context.globalCompositeOperation = 'destination-over';
         context.fillRect(0, 0, tileWidth, tileHeight);
@@ -85,18 +83,18 @@ ROT.Display.Tile.prototype.draw = function (data, clearBefore) {
   }
 };
 
-ROT.Display.Tile.prototype.computeSize = function (availWidth, availHeight) {
+TileDisplayBackend.prototype.computeSize = function computeSize(availWidth, availHeight) {
   const width = Math.floor(availWidth / this._options.tileWidth);
   const height = Math.floor(availHeight / this._options.tileHeight);
   return [width, height];
 };
 
-ROT.Display.Tile.prototype.computeFontSize = function (availWidth, availHeight) {
+TileDisplayBackend.prototype.computeFontSize = function computeFontSize(availWidth, availHeight) {
   const width = Math.floor(availWidth / this._options.width);
   const height = Math.floor(availHeight / this._options.height);
   return [width, height];
 };
 
-ROT.Display.Tile.prototype.eventToPosition = function (x, y) {
+TileDisplayBackend.prototype.eventToPosition = function eventToPosition(x, y) {
   return [Math.floor(x / this._options.tileWidth), Math.floor(y / this._options.tileHeight)];
 };

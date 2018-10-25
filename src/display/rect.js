@@ -1,20 +1,23 @@
+import DisplayBackend from './backend';
+import extend from '../js/function';
+
 /**
  * @class Rectangular backend
  * @private
  */
-ROT.Display.Rect = function (context) {
-  ROT.Display.Backend.call(this, context);
+export default function RectDisplayBackend(context) {
+  DisplayBackend.call(this, context);
 
   this._spacingX = 0;
   this._spacingY = 0;
   this._canvasCache = {};
   this._options = {};
-};
-ROT.Display.Rect.extend(ROT.Display.Backend);
+}
+extend(DisplayBackend, RectDisplayBackend);
 
-ROT.Display.Rect.cache = false;
+RectDisplayBackend.cache = false;
 
-ROT.Display.Rect.prototype.compute = function (options) {
+RectDisplayBackend.prototype.compute = function compute(options) {
   this._canvasCache = {};
   this._options = options;
 
@@ -30,7 +33,7 @@ ROT.Display.Rect.prototype.compute = function (options) {
   this._context.canvas.height = options.height * this._spacingY;
 };
 
-ROT.Display.Rect.prototype.draw = function (data, clearBefore) {
+RectDisplayBackend.prototype.draw = function draw(data, clearBefore) {
   if (this.constructor.cache) {
     this._drawWithCache(data, clearBefore);
   } else {
@@ -38,19 +41,16 @@ ROT.Display.Rect.prototype.draw = function (data, clearBefore) {
   }
 };
 
-ROT.Display.Rect.prototype._drawWithCache = function (data, clearBefore) {
-  const x = data[0];
-  const y = data[1];
-  const ch = data[2];
-  const fg = data[3];
-  const bg = data[4];
+RectDisplayBackend.prototype._drawWithCache = function _drawWithCache(data) {
+  const [x, y, ch, fg, bg] = data;
 
   const hash = `${ch}${fg}${bg}`;
-  if (hash in this._canvasCache) {
-    var canvas = this._canvasCache[hash];
+  let canvas;
+  if (this._canvasCache.hasOwnProperty(hash)) {
+    canvas = this._canvasCache[hash];
   } else {
     const b = this._options.border;
-    var canvas = document.createElement('canvas');
+    canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = this._spacingX;
     canvas.height = this._spacingY;
@@ -74,12 +74,8 @@ ROT.Display.Rect.prototype._drawWithCache = function (data, clearBefore) {
   this._context.drawImage(canvas, x * this._spacingX, y * this._spacingY);
 };
 
-ROT.Display.Rect.prototype._drawNoCache = function (data, clearBefore) {
-  const x = data[0];
-  const y = data[1];
-  const ch = data[2];
-  const fg = data[3];
-  const bg = data[4];
+RectDisplayBackend.prototype._drawNoCache = function _drawNoCache(data, clearBefore) {
+  const [x, y, ch, fg, bg] = data;
 
   if (clearBefore) {
     const b = this._options.border;
@@ -97,13 +93,13 @@ ROT.Display.Rect.prototype._drawNoCache = function (data, clearBefore) {
   }
 };
 
-ROT.Display.Rect.prototype.computeSize = function (availWidth, availHeight) {
+RectDisplayBackend.prototype.computeSize = function computeSize(availWidth, availHeight) {
   const width = Math.floor(availWidth / this._spacingX);
   const height = Math.floor(availHeight / this._spacingY);
   return [width, height];
 };
 
-ROT.Display.Rect.prototype.computeFontSize = function (availWidth, availHeight) {
+RectDisplayBackend.prototype.computeFontSize = function computeFontSize(availWidth, availHeight) {
   const boxWidth = Math.floor(availWidth / this._options.width);
   let boxHeight = Math.floor(availHeight / this._options.height);
 
@@ -121,6 +117,6 @@ ROT.Display.Rect.prototype.computeFontSize = function (availWidth, availHeight) 
   return Math.floor(boxHeight / this._options.spacing);
 };
 
-ROT.Display.Rect.prototype.eventToPosition = function (x, y) {
+RectDisplayBackend.prototype.eventToPosition = function eventToPosition(x, y) {
   return [Math.floor(x / this._spacingX), Math.floor(y / this._spacingY)];
 };
