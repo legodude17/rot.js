@@ -1,4 +1,3 @@
-
 export const RE_COLORS = /%([bc]){([^}]*)}/g;
 
 /* token types */
@@ -17,11 +16,11 @@ export const TYPE_BG = 3;
  */
 export function _breakInsideToken(tokens, tokenIndex, breakIndex, removeBreakChar) {
   const newBreakToken = {
-    type: TYPE_NEWLINE
+    type: TYPE_NEWLINE,
   };
   const newTextToken = {
     type: TYPE_TEXT,
-    value: tokens[tokenIndex].value.substring(breakIndex + (removeBreakChar ? 1 : 0))
+    value: tokens[tokenIndex].value.substring(breakIndex + (removeBreakChar ? 1 : 0)),
   };
   tokens.splice(tokenIndex + 1, 0, newBreakToken, newTextToken);
   return tokens[tokenIndex].value.substring(0, breakIndex);
@@ -130,14 +129,14 @@ export function tokenize(str, maxWidth) {
     if (part.length) {
       result.push({
         type: TYPE_TEXT,
-        value: part
+        value: part,
       });
     }
 
     /* color command */
     result.push({
       type: (type === 'c' ? TYPE_FG : TYPE_BG),
-      value: name.trim()
+      value: name.trim(),
     });
 
     offset = index + match.length;
@@ -149,7 +148,7 @@ export function tokenize(str, maxWidth) {
   if (part.length) {
     result.push({
       type: TYPE_TEXT,
-      value: part
+      value: part,
     });
   }
 

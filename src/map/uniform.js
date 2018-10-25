@@ -13,7 +13,7 @@ export default function UniformDungeonMap(width, height, options) {
     roomWidth: [3, 9], /* room minimum and maximum width */
     roomHeight: [3, 5], /* room minimum and maximum height */
     roomDugPercentage: 0.1, /* we stop after this percentage of level area has been dug out by rooms */
-    timeLimit: 1000 /* we stop after this much time has passed (msec) */
+    timeLimit: 1000, /* we stop after this much time has passed (msec) */
   };
   Object.assign(this._options, options);
 

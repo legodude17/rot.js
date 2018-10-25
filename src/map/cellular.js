@@ -18,7 +18,7 @@ export default function CellularMap(width, height, options) {
   this._options = {
     born: [5, 6, 7, 8],
     survive: [4, 5, 6, 7, 8],
-    topology: 8
+    topology: 8,
   };
   this.setOptions(options);
 
@@ -234,14 +234,14 @@ CellularMap.prototype._findConnected = function _findConnected(connected, notCon
         [p[0] - 1, p[1] - 1],
         [p[0] - 2, p[1]],
         [p[0] - 1, p[1] + 1],
-        [p[0] + 1, p[1] + 1]
+        [p[0] + 1, p[1] + 1],
       ];
     } else {
       tests = [
         [p[0] + 1, p[1]],
         [p[0] - 1, p[1]],
         [p[0], p[1] + 1],
-        [p[0], p[1] - 1]
+        [p[0], p[1] - 1],
       ];
     }
 

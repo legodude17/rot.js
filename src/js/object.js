@@ -1,10 +1,10 @@
-if (!Object.create) {  
-	/**
+if (!Object.create) {
+  /**
 	 * ES5 Object.create
 	 */
-	Object.create = function(o) {  
-		var tmp = function() {};
-		tmp.prototype = o;
-		return new tmp();
-	};  
-}  
+  Object.create = function (o) {
+    const tmp = function () {};
+    tmp.prototype = o;
+    return new tmp();
+  };
+}

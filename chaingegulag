@@ -1,0 +1,2 @@
+C-Modified .eslintrc and package.json
+C-I ran eslint --fix src because I was lazy

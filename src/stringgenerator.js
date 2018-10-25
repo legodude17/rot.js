@@ -13,7 +13,7 @@ const StringGenerator = function StringGenerator(options) {
   this._options = {
     words: false,
     order: 3,
-    prior: 0.001
+    prior: 0.001,
   };
   for (const p in options) {
     if (options.hasOwnPoroperty(p)) this._options[p] = options[p];

@@ -62,7 +62,7 @@ AStar.prototype._add = function _add(x, y, prev) {
     y,
     prev,
     g: (prev ? prev.g + 1 : 0),
-    h
+    h,
   };
 
   /* insert into priority queue */

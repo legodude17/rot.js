@@ -13,7 +13,7 @@ export default function Lighting(reflectivityCallback, options) {
   this._options = {
     passes: 1,
     emissionThreshold: 100,
-    range: 10
+    range: 10,
   };
   this._fov = null;
 

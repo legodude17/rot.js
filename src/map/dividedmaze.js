@@ -26,7 +26,7 @@ DividedMaze.prototype.create = function create(callback) {
   }
 
   this._stack = [
-    [1, 1, w - 2, h - 2]
+    [1, 1, w - 2, h - 2],
   ];
   this._process();
 

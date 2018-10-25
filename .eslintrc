@@ -5,31 +5,23 @@
     "no-shadow": "off",
     "no-return-assign": 1,
     "arrow-parens": ["error", "as-needed"],
-    "max-len": [
-      "warn",
-      {
-        "code": 120
-      }
-    ],
-    "comma-dangle": [
-      "error",
-      "never"
-    ],
+    "max-len": ["warn", { "code": 120 }],
     "no-restricted-syntax": [
       "error",
       "WithStatement",
       "BinaryExpression[operator='in']"
     ],
-    "indent": [
-      "error",
-      2
-    ],
+    "indent": ["error", 2],
     "no-param-reassign": "off",
     "no-plusplus": "off",
     "no-underscore-dangle": "off",
-    "no-prototype-builtins": "off"
+    "no-prototype-builtins": "off",
+    "no-bitwise": "off",
+    "no-mixed-operators": "off",
+    "camelcase": "off",
+    "no-var": "off"
   },
   "env": {
     "browser": true
-    }
+  }
 }
