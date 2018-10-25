@@ -1,16 +1,19 @@
-/**
- * @class Precise shadowcasting algorithm
- * @augments ROT.FOV
- */
-ROT.FOV.PreciseShadowcasting = function (lightPassesCallback, options) {
-  ROT.FOV.call(this, lightPassesCallback, options);
-};
-ROT.FOV.PreciseShadowcasting.extend(ROT.FOV);
+import FOV from './fov';
+import extend from '../js/function';
 
 /**
- * @see ROT.FOV#compute
+ * @class Precise shadowcasting algorithm
+ * @augments FOV
  */
-ROT.FOV.PreciseShadowcasting.prototype.compute = function (x, y, R, callback) {
+export default function PreciseShadowcasting(lightPassesCallback, options) {
+  FOV.call(this, lightPassesCallback, options);
+}
+extend(FOV, PreciseShadowcasting);
+
+/**
+ * @see FOV#compute
+ */
+PreciseShadowcasting.prototype.compute = function compute(x, y, R, callback) {
   /* this place is always visible */
   callback(x, y, 0, 1);
 
@@ -29,8 +32,7 @@ ROT.FOV.PreciseShadowcasting.prototype.compute = function (x, y, R, callback) {
     const neighborCount = neighbors.length;
 
     for (let i = 0; i < neighborCount; i++) {
-      cx = neighbors[i][0];
-      cy = neighbors[i][1];
+      [cx, cy] = neighbors[i];
       /* shift half-an-angle backwards to maintain consistency of 0-th cells */
       A1 = [i ? 2 * i - 1 : 2 * neighborCount - 1, 2 * neighborCount];
       A2 = [2 * i + 1, 2 * neighborCount];
@@ -39,7 +41,7 @@ ROT.FOV.PreciseShadowcasting.prototype.compute = function (x, y, R, callback) {
       visibility = this._checkVisibility(A1, A2, blocks, SHADOWS);
       if (visibility) { callback(cx, cy, r, visibility); }
 
-      if (SHADOWS.length == 2 && SHADOWS[0][0] == 0 && SHADOWS[1][0] == SHADOWS[1][1]) { return; } /* cutoff? */
+      if (SHADOWS.length === 2 && SHADOWS[0][0] === 0 && SHADOWS[1][0] === SHADOWS[1][1]) { return; } /* cutoff? */
     } /* for all cells in this ring */
   } /* for all rings */
 };
@@ -50,7 +52,7 @@ ROT.FOV.PreciseShadowcasting.prototype.compute = function (x, y, R, callback) {
  * @param {bool} blocks Does current arc block visibility?
  * @param {int[][]} SHADOWS list of active shadows
  */
-ROT.FOV.PreciseShadowcasting.prototype._checkVisibility = function (A1, A2, blocks, SHADOWS) {
+PreciseShadowcasting.prototype._checkVisibility = function _checkVisibility(A1, A2, blocks, SHADOWS) {
   if (A1[0] > A2[0]) { /* split into two sub-arcs */
     const v1 = this._checkVisibility(A1, [A1[1], A1[1]], blocks, SHADOWS);
     const v2 = this._checkVisibility([0, 1], A2, blocks, SHADOWS);
@@ -61,10 +63,10 @@ ROT.FOV.PreciseShadowcasting.prototype._checkVisibility = function (A1, A2, bloc
   let index1 = 0; let
     edge1 = false;
   while (index1 < SHADOWS.length) {
-    var old = SHADOWS[index1];
-    var diff = old[0] * A1[1] - A1[0] * old[1];
+    const old = SHADOWS[index1];
+    const diff = old[0] * A1[1] - A1[0] * old[1];
     if (diff >= 0) { /* old >= A1 */
-      if (diff == 0 && !(index1 % 2)) { edge1 = true; }
+      if (diff === 0 && !(index1 % 2)) { edge1 = true; }
       break;
     }
     index1++;
@@ -74,18 +76,18 @@ ROT.FOV.PreciseShadowcasting.prototype._checkVisibility = function (A1, A2, bloc
   let index2 = SHADOWS.length; let
     edge2 = false;
   while (index2--) {
-    var old = SHADOWS[index2];
-    var diff = A2[0] * old[1] - old[0] * A2[1];
+    const old = SHADOWS[index2];
+    const diff = A2[0] * old[1] - old[0] * A2[1];
     if (diff >= 0) { /* old <= A2 */
-      if (diff == 0 && (index2 % 2)) { edge2 = true; }
+      if (diff === 0 && (index2 % 2)) { edge2 = true; }
       break;
     }
   }
 
   let visible = true;
-  if (index1 == index2 && (edge1 || edge2)) { /* subset of existing shadow, one of the edges match */
+  if (index1 === index2 && (edge1 || edge2)) { /* subset of existing shadow, one of the edges match */
     visible = false;
-  } else if (edge1 && edge2 && index1 + 1 == index2 && (index2 % 2)) { /* completely equivalent with existing shadow */
+  } else if (edge1 && edge2 && index1 + 1 === index2 && (index2 % 2)) { /* completely equivalent with existing shadow */
     visible = false;
   } else if (index1 > index2 && (index1 % 2)) { /* subset of existing shadow, not touching */
     visible = false;
@@ -93,18 +95,18 @@ ROT.FOV.PreciseShadowcasting.prototype._checkVisibility = function (A1, A2, bloc
 
   if (!visible) { return 0; } /* fast case: not visible */
 
-  let visibleLength; var
+  let visibleLength; let
     P;
 
   /* compute the length of visible arc, adjust list of shadows (if blocking) */
   const remove = index2 - index1 + 1;
   if (remove % 2) {
     if (index1 % 2) { /* first edge within existing shadow, second outside */
-      var P = SHADOWS[index1];
+      P = SHADOWS[index1];
       visibleLength = (A2[0] * P[1] - P[0] * A2[1]) / (P[1] * A2[1]);
       if (blocks) { SHADOWS.splice(index1, remove, A2); }
     } else { /* second edge within existing shadow, first outside */
-      var P = SHADOWS[index2];
+      P = SHADOWS[index2];
       visibleLength = (P[0] * A1[1] - A1[0] * P[1]) / (A1[1] * P[1]);
       if (blocks) { SHADOWS.splice(index1, remove, A1); }
     }

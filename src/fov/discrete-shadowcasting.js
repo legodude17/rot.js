@@ -1,19 +1,19 @@
+import FOV from './fov';
+import extend from '../js/function';
+
 /**
  * @class Discrete shadowcasting algorithm. Obsoleted by Precise shadowcasting.
- * @augments ROT.FOV
+ * @augments FOV
  */
-ROT.FOV.DiscreteShadowcasting = function (lightPassesCallback, options) {
-  ROT.FOV.call(this, lightPassesCallback, options);
-};
-ROT.FOV.DiscreteShadowcasting.extend(ROT.FOV);
+export default function DiscreteShadowcasting(lightPassesCallback, options) {
+  FOV.call(this, lightPassesCallback, options);
+}
+extend(FOV, DiscreteShadowcasting);
 
 /**
- * @see ROT.FOV#compute
+ * @see FOV#compute
  */
-ROT.FOV.DiscreteShadowcasting.prototype.compute = function (x, y, R, callback) {
-  const center = this._coords;
-  const map = this._map;
-
+DiscreteShadowcasting.prototype.compute = function compute(x, y, R, callback) {
   /* this place is always visible */
   callback(x, y, 0, 1);
 
@@ -32,15 +32,14 @@ ROT.FOV.DiscreteShadowcasting.prototype.compute = function (x, y, R, callback) {
     const angle = 360 / neighbors.length;
 
     for (let i = 0; i < neighbors.length; i++) {
-      cx = neighbors[i][0];
-      cy = neighbors[i][1];
+      [cx, cy] = neighbors[i];
       A = angle * (i - 0.5);
       B = A + angle;
 
       blocks = !this._lightPasses(cx, cy);
       if (this._visibleCoords(Math.floor(A), Math.ceil(B), blocks, DATA)) { callback(cx, cy, r, 1); }
 
-      if (DATA.length == 2 && DATA[0] == 0 && DATA[1] == 360) { return; } /* cutoff? */
+      if (DATA.length === 2 && DATA[0] === 0 && DATA[1] === 360) { return; } /* cutoff? */
     } /* for all cells in this ring */
   } /* for all rings */
 };
@@ -51,7 +50,7 @@ ROT.FOV.DiscreteShadowcasting.prototype.compute = function (x, y, R, callback) {
  * @param {bool} blocks Does current cell block visibility?
  * @param {int[][]} DATA shadowed angle pairs
  */
-ROT.FOV.DiscreteShadowcasting.prototype._visibleCoords = function (A, B, blocks, DATA) {
+DiscreteShadowcasting.prototype._visibleCoords = function _visibleCoords(A, B, blocks, DATA) {
   if (A < 0) {
     const v1 = this._visibleCoords(0, B, blocks, DATA);
     const v2 = this._visibleCoords(360 + A, 360, blocks, DATA);
@@ -61,7 +60,7 @@ ROT.FOV.DiscreteShadowcasting.prototype._visibleCoords = function (A, B, blocks,
   let index = 0;
   while (index < DATA.length && DATA[index] < A) { index++; }
 
-  if (index == DATA.length) { /* completely new shadow */
+  if (index === DATA.length) { /* completely new shadow */
     if (blocks) { DATA.push(A, B); }
     return true;
   }
@@ -74,7 +73,7 @@ ROT.FOV.DiscreteShadowcasting.prototype._visibleCoords = function (A, B, blocks,
       count++;
     }
 
-    if (count == 0) { return false; }
+    if (count === 0) { return false; }
 
     if (blocks) {
       if (count % 2) {
@@ -92,7 +91,7 @@ ROT.FOV.DiscreteShadowcasting.prototype._visibleCoords = function (A, B, blocks,
   }
 
   /* visible when outside an existing shadow, or when overlapping */
-  if (A == DATA[index - count] && count == 1) { return false; }
+  if (A === DATA[index - count] && count === 1) { return false; }
 
   if (blocks) {
     if (count % 2) {
