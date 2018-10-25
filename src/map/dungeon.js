@@ -1,26 +1,29 @@
+import Map from './map';
+import { extend } from '../js/function';
+
 /**
  * @class Dungeon map: has rooms and corridors
- * @augments ROT.Map
+ * @augments Map
  */
-ROT.Map.Dungeon = function(width, height) {
-	ROT.Map.call(this, width, height);
-	this._rooms = []; /* list of all rooms */
-	this._corridors = [];
-};
-ROT.Map.Dungeon.extend(ROT.Map);
+export default function Dungeon(width, height) {
+  Map.call(this, width, height);
+  this._rooms = []; /* list of all rooms */
+  this._corridors = [];
+}
+extend(Map, Dungeon);
 
 /**
  * Get all generated rooms
- * @returns {ROT.Map.Feature.Room[]}
+ * @returns {Map.Feature.Room[]}
  */
-ROT.Map.Dungeon.prototype.getRooms = function() {
-	return this._rooms;
+Dungeon.prototype.getRooms = function getRooms() {
+  return this._rooms;
 };
 
 /**
  * Get all generated corridors
- * @returns {ROT.Map.Feature.Corridor[]}
+ * @returns {Map.Feature.Corridor[]}
  */
-ROT.Map.Dungeon.prototype.getCorridors = function() {
-	return this._corridors;
+Dungeon.prototype.getCorridors = function getCorridors() {
+  return this._corridors;
 };
