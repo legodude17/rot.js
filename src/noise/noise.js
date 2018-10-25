@@ -1,7 +1,7 @@
 /**
  * @class Base noise generator
  */
-ROT.Noise = function() {
-};
+export default function Noise() {
+}
 
-ROT.Noise.prototype.get = function(x, y) {};
+Noise.prototype.get = function get(x, y) {}; // eslint-disable-line no-unused-vars

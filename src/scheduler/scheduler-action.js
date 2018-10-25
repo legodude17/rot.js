@@ -1,50 +1,53 @@
+import Scheduler from './scheduler';
+import { extend } from '../js/function';
+
 /**
  * @class Action-based scheduler
- * @augments ROT.Scheduler
+ * @augments Scheduler
  */
-ROT.Scheduler.Action = function() {
-	ROT.Scheduler.call(this);
-	this._defaultDuration = 1; /* for newly added */
-	this._duration = this._defaultDuration; /* for this._current */
-};
-ROT.Scheduler.Action.extend(ROT.Scheduler);
+export default function ActionScheduler() {
+  Scheduler.call(this);
+  this._defaultDuration = 1; /* for newly added */
+  this._duration = this._defaultDuration; /* for this._current */
+}
+extend(Scheduler, ActionScheduler);
 
 /**
  * @param {object} item
  * @param {bool} repeat
  * @param {number} [time=1]
- * @see ROT.Scheduler#add
+ * @see Scheduler#add
  */
-ROT.Scheduler.Action.prototype.add = function(item, repeat, time) {
-	this._queue.add(item, time || this._defaultDuration);
-	return ROT.Scheduler.prototype.add.call(this, item, repeat);
+ActionScheduler.prototype.add = function add(item, repeat, time) {
+  this._queue.add(item, time || this._defaultDuration);
+  return Scheduler.prototype.add.call(this, item, repeat);
 };
 
-ROT.Scheduler.Action.prototype.clear = function() {
-	this._duration = this._defaultDuration;
-	return ROT.Scheduler.prototype.clear.call(this);
+ActionScheduler.prototype.clear = function clear() {
+  this._duration = this._defaultDuration;
+  return Scheduler.prototype.clear.call(this);
 };
 
-ROT.Scheduler.Action.prototype.remove = function(item) {
-	if (item == this._current) { this._duration = this._defaultDuration; }
-	return ROT.Scheduler.prototype.remove.call(this, item);
+ActionScheduler.prototype.remove = function remove(item) {
+  if (item === this._current) { this._duration = this._defaultDuration; }
+  return Scheduler.prototype.remove.call(this, item);
 };
 
 /**
- * @see ROT.Scheduler#next
+ * @see Scheduler#next
  */
-ROT.Scheduler.Action.prototype.next = function() {
-	if (this._current && this._repeat.indexOf(this._current) != -1) {
-		this._queue.add(this._current, this._duration || this._defaultDuration);
-		this._duration = this._defaultDuration;
-	}
-	return ROT.Scheduler.prototype.next.call(this);
+ActionScheduler.prototype.next = function next() {
+  if (this._current && this._repeat.indexOf(this._current) !== -1) {
+    this._queue.add(this._current, this._duration || this._defaultDuration);
+    this._duration = this._defaultDuration;
+  }
+  return Scheduler.prototype.next.call(this);
 };
 
 /**
  * Set duration for the active item
  */
-ROT.Scheduler.Action.prototype.setDuration = function(time) {
-	if (this._current) { this._duration = time; }
-	return this;
+ActionScheduler.prototype.setDuration = function setDuration(time) {
+  if (this._current) { this._duration = time; }
+  return this;
 };

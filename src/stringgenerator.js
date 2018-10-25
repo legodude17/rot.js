@@ -43,7 +43,7 @@ StringGenerator.prototype.clear = function clear() {
  */
 StringGenerator.prototype.generate = function generate() {
   const result = [this._sample(this._prefix)];
-  while (result[result.length - 1] != this._boundary) {
+  while (result[result.length - 1] !== this._boundary) {
     result.push(this._sample(result));
   }
   return this._join(result.slice(0, -1));
@@ -75,16 +75,18 @@ StringGenerator.prototype.getStats = function getStats() {
   const parts = [];
 
   let priorCount = 0;
-  for (var p in this._priorValues) { priorCount++; }
+  for (const p in this._priorValues) { if (this._priorValues.hasOwnProperty(p)) priorCount++; }
   priorCount--; /* boundary */
   parts.push(`distinct samples: ${priorCount}`);
 
   let dataCount = 0;
   let eventCount = 0;
-  for (var p in this._data) {
-    dataCount++;
-    for (const key in this._data[p]) {
-      eventCount++;
+  for (const p in this._data) {
+    if (this._data.hasOwnProperty(p)) {
+      dataCount++;
+      for (const key in this._data[p]) {
+        if (this._data[p].hasOwnProperty(key)) eventCount++;
+      }
     }
   }
   parts.push(`dictionary size (contexts): ${dataCount}`);
@@ -115,10 +117,10 @@ StringGenerator.prototype._join = function _join(arr) {
  */
 StringGenerator.prototype._observeEvent = function _observeEvent(context, event) {
   const key = this._join(context);
-  if (!(key in this._data)) { this._data[key] = {}; }
+  if (!this._data.hasOwnProperty(key)) { this._data[key] = {}; }
   const data = this._data[key];
 
-  if (!(event in data)) { data[event] = 0; }
+  if (!data.hasOwnProperty(event)) { data[event] = 0; }
   data[event]++;
 };
 
@@ -134,8 +136,10 @@ StringGenerator.prototype._sample = function _sample(context) {
   let available = {};
 
   if (this._options.prior) {
-    for (var event in this._priorValues) { available[event] = this._priorValues[event]; }
-    for (var event in data) { available[event] += data[event]; }
+    for (const event in this._priorValues) {
+      if (this._priorValues.hasOwnProperty(event)) available[event] = this._priorValues[event];
+    }
+    for (const event in data) { if (this._data.hasOwnProperty(event)) available[event] += data[event]; }
   } else {
     available = data;
   }
@@ -154,7 +158,7 @@ StringGenerator.prototype._backoff = function _backoff(context) {
     context = this._prefix.slice(0, this._options.order - context.length).concat(context);
   }
 
-  while (!(this._join(context) in this._data) && context.length > 0) { context = context.slice(1); }
+  while (!this._data.hasOwnProperty(this._join(context)) && context.length > 0) { context = context.slice(1); }
 
   return context;
 };

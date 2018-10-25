@@ -1,138 +1,130 @@
+let seed; let s0; let s1; let s2; let
+  c; let frac;
+
+/* eslint-disable no-bitwise */
 /**
- * @namespace
- * This code is an implementation of Alea algorithm; (C) 2010 Johannes Baagøe.
- * Alea is licensed according to the http://en.wikipedia.org/wiki/MIT_License.
- */
-ROT.RNG = {
-	/**
-	 * @returns {number} 
-	 */
-	getSeed: function() {
-		return this._seed;
-	},
+  * @returns {number}
+  */
+export function getSeed() {
+  return seed;
+}
 
-	/**
-	 * @param {number} seed Seed the number generator
-	 */
-	setSeed: function(seed) {
-		seed = (seed < 1 ? 1/seed : seed);
+/**
+  * @param {number} seed Seed the number generator
+  */
+export function setSeed(sed) {
+  sed = (sed < 1 ? 1 / sed : sed);
 
-		this._seed = seed;
-		this._s0 = (seed >>> 0) * this._frac;
+  seed = sed;
+  s0 = (sed >>> 0) * frac;
 
-		seed = (seed*69069 + 1) >>> 0;
-		this._s1 = seed * this._frac;
+  sed = (sed * 69069 + 1) >>> 0;
+  s1 = sed * frac;
 
-		seed = (seed*69069 + 1) >>> 0;
-		this._s2 = seed * this._frac;
+  sed = (sed * 69069 + 1) >>> 0;
+  s2 = sed * frac;
 
-		this._c = 1;
-		return this;
-	},
+  c = 1;
+  return this;
+}
 
-	/**
-	 * @returns {float} Pseudorandom value [0,1), uniformly distributed
-	 */
-	getUniform: function() {
-		var t = 2091639 * this._s0 + this._c * this._frac;
-		this._s0 = this._s1;
-		this._s1 = this._s2;
-		this._c = t | 0;
-		this._s2 = t - this._c;
-		return this._s2;
-	},
+/**
+  * @returns {float} Pseudorandom value [0,1), uniformly distributed
+  */
+export function getUniform() {
+  const t = 2091639 * s0 + c * frac;
+  s0 = s1;
+  s1 = s2;
+  c = t | 0;
+  s2 = t - c;
+  return s2;
+}
 
-	/**
-	 * @param {int} lowerBound The lower end of the range to return a value from, inclusive
-	 * @param {int} upperBound The upper end of the range to return a value from, inclusive
-	 * @returns {int} Pseudorandom value [lowerBound, upperBound], using ROT.RNG.getUniform() to distribute the value
-	 */
-	getUniformInt: function(lowerBound, upperBound) {
-		var max = Math.max(lowerBound, upperBound);
-		var min = Math.min(lowerBound, upperBound);
-		return Math.floor(this.getUniform() * (max - min + 1)) + min;
-	},
+/**
+  * @param {int} lowerBound The lower end of the range to return a value from, inclusive
+  * @param {int} upperBound The upper end of the range to return a value from, inclusive
+  * @returns {int} Pseudorandom value [lowerBound, upperBound], using getUniform() to distribute the value
+  */
+export function getUniformInt(lowerBound, upperBound) {
+  const max = Math.max(lowerBound, upperBound);
+  const min = Math.min(lowerBound, upperBound);
+  return Math.floor(getUniform() * (max - min + 1)) + min;
+}
 
-	/**
-	 * @param {float} [mean=0] Mean value
-	 * @param {float} [stddev=1] Standard deviation. ~95% of the absolute values will be lower than 2*stddev.
-	 * @returns {float} A normally distributed pseudorandom value
-	 */
-	getNormal: function(mean, stddev) {
-		do {
-			var u = 2*this.getUniform()-1;
-			var v = 2*this.getUniform()-1;
-			var r = u*u + v*v;
-		} while (r > 1 || r == 0);
+/**
+  * @param {float} [mean=0] Mean value
+  * @param {float} [stddev=1] Standard deviation. ~95% of the absolute values will be lower than 2*stddev.
+  * @returns {float} A normally distributed pseudorandom value
+  */
+export function getNormal(mean, stddev) {
+  let u; let r;
+  do {
+    u = 2 * getUniform() - 1;
+    const v = 2 * getUniform() - 1;
+    r = u * u + v * v;
+  } while (r > 1 || r === 0);
 
-		var gauss = u * Math.sqrt(-2*Math.log(r)/r);
-		return (mean || 0) + gauss*(stddev || 1);
-	},
+  const gauss = u * Math.sqrt(-2 * Math.log(r) / r);
+  return (mean || 0) + gauss * (stddev || 1);
+}
 
-	/**
-	 * @returns {int} Pseudorandom value [1,100] inclusive, uniformly distributed
-	 */
-	getPercentage: function() {
-		return 1 + Math.floor(this.getUniform()*100);
-	},
-	
-	/**
-	 * @param {object} data key=whatever, value=weight (relative probability)
-	 * @returns {string} whatever
-	 */
-	getWeightedValue: function(data) {
-		var total = 0;
-		
-		for (var id in data) {
-			total += data[id];
-		}
-		var random = this.getUniform()*total;
-		
-		var part = 0;
-		for (var id in data) {
-			part += data[id];
-			if (random < part) { return id; }
-		}
+/**
+  * @returns {int} Pseudorandom value [1,100] inclusive, uniformly distributed
+  */
+export function getPercentage() {
+  return 1 + Math.floor(getUniform() * 100);
+}
 
-		// If by some floating-point annoyance we have
-		// random >= total, just return the last id.
-		return id;
-	},
+/**
+  * @param {object} data key=whatever, value=weight (relative probability)
+  * @returns {string} whatever
+  */
+export function getWeightedValue(data) {
+  let total = 0;
 
-	/**
-	 * Get RNG state. Useful for storing the state and re-setting it via setState.
-	 * @returns {?} Internal state
-	 */
-	getState: function() {
-		return [this._s0, this._s1, this._s2, this._c];
-	},
+  for (const id in data) {
+    if (data.hasOwnProperty(id)) total += data[id];
+  }
+  const random = getUniform() * total;
 
-	/**
-	 * Set a previously retrieved state.
-	 * @param {?} state
-	 */
-	setState: function(state) {
-		this._s0 = state[0];
-		this._s1 = state[1];
-		this._s2 = state[2];
-		this._c  = state[3];
-		return this;
-	},
+  let part = 0;
+  let id;
+  for (id in data) {
+    if (data.hasOwnProperty(id)) {
+      part += data[id];
+      if (random < part) { return id; }
+    }
+  }
 
-	/**
-	 * Returns a cloned RNG
-	 */
-	clone: function() {
-		var clone = Object.create(this);
-		clone.setState(this.getState());
-		return clone;
-	},
+  // If by some floating-point annoyance we have
+  // random >= total, just return the last id.
+  return id;
+}
 
-	_s0: 0,
-	_s1: 0,
-	_s2: 0,
-	_c: 0,
-	_frac: 2.3283064365386963e-10 /* 2^-32 */
-};
+/**
+  * Get RNG state. Useful for storing the state and re-setting it via setState.
+  * @returns {?} Internal state
+  */
+export function getState() {
+  return [s0, s1, s2, c];
+}
 
-ROT.RNG.setSeed(Date.now());
+/**
+  * Set a previously retrieved state.
+  * @param {?} state
+  */
+export function setState(state) {
+  [s0, s1, s2, c] = state;
+  return this;
+}
+
+/**
+  * Returns a cloned RNG
+  */
+export function clone() {
+  const clone = Object.create(this);
+  clone.setState(getState());
+  return clone;
+}
+
+setSeed(Date.now());
