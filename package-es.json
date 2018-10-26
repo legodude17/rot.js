@@ -1,6 +1,6 @@
 {
   "name": "rot.es",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "ROguelike Toolkit for JS",
   "main": "src/rot.js",
   "files": [
