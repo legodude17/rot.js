@@ -9,7 +9,7 @@
  */
 import { getWeightedValue } from './rng';
 
-const StringGenerator = function StringGenerator(options) {
+export default function StringGenerator(options) {
   this._options = {
     words: false,
     order: 3,
@@ -28,7 +28,7 @@ const StringGenerator = function StringGenerator(options) {
   this._priorValues[this._boundary] = this._options.prior;
 
   this._data = {};
-};
+}
 
 /**
  * Remove all learning data

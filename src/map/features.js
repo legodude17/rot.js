@@ -215,7 +215,7 @@ Room.prototype.getBottom = function getBottom() {
  * @param {int} endX
  * @param {int} endY
  */
-export default function Corridor(startX, startY, endX, endY) {
+export function Corridor(startX, startY, endX, endY) {
   this._startX = startX;
   this._startY = startY;
   this._endX = endX;

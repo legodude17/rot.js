@@ -1,5 +1,5 @@
 import Scheduler from './scheduler';
-import { extend } from '../js/function';
+import extend from '../js/function';
 
 /**
  * @class Action-based scheduler

@@ -1,0 +1,9 @@
+{
+  "name": "rot-addons",
+  "private": true,
+  "version": "0.7.0-dev",
+  "devDependencies": {
+    "rollup": "^0.66.6",
+    "rollup-plugin-serve": "^0.6.0"
+  }
+}

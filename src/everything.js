@@ -1,6 +1,6 @@
 // This file imports everything in order to convice rollup to compile it all
 
-import * as ROT from './rot';
+import * as Constants from './rot';
 import * as RNG from './rng';
 import * as Text from './text';
 import StringGenerator from './stringgenerator';
@@ -34,6 +34,7 @@ import PreciseShadowcasting from './fov/precise-shadowcasting';
 import RecursiveShadowcasting from './fov/recursive-shadowcasting';
 import Display from './display/display';
 
+const ROT = Object.assign({}, Constants);
 ROT.RNG = RNG;
 ROT.Text = Text;
 ROT.StringGenerator = StringGenerator;
