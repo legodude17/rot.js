@@ -1,9 +1,11 @@
 {
   "name": "@legodude/rot.js",
-  "version": "0.7.0-dev",
+  "version": "0.7.0",
   "description": "ROguelike Toolkit for JS",
   "main": "dist/rot.js",
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
