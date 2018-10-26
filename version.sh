@@ -5,50 +5,30 @@ echo "Removing package.json"
 
 rm package.json
 
-echo "Starting JS build"
+echo "Starting JS version"
 echo "Copying package-js.json to package.json"
 
 cp package-js.json package.json
 
-echo "Running rollup"
+echo "Running version"
 
-./node_modules/.bin/rollup -c
+npm version $1
 
-echo "Finding files..."
-
-npm pack --dry-run
-
-echo "Proceed? (^C to quit)"
-
-read
-
-echo "Publishing"
-
-npm publish
-
-echo "Finishing JS build"
+echo "Finishing JS version"
 echo "Removing package.json"
 
 rm package.json
 
-echo "Starting ES build"
+echo "Starting ES version"
 echo "Copying package-es.json to package.json"
 
 cp package-es.json package.json
 
-echo "Finding files..."
+echo "Running version"
 
-npm pack --dry-run
+npm version $1
 
-echo "Proceed? (^C to quit)"
-
-read
-
-echo "Publishing"
-
-npm publish
-
-echo "Finishing ES build"
+echo "Finishing ES version"
 echo "Removing package.json"
 
 rm package.json
@@ -57,6 +37,11 @@ echo "Replacing original package.json"
 echo "Copying package-base.json to package.json"
 
 cp package-base.json package.json
+
+echo "Versioning base"
+echo "Running version to VERSION"
+
+npm version $1 > VERSION
 
 echo "Done"
 
