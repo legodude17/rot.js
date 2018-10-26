@@ -55,7 +55,7 @@ Dijkstra.prototype._add = function _add(x, y, prev) {
   const obj = {
     x,
     y,
-    prev,
+    prev
   };
   this._computed[`${x},${y}`] = obj;
   this._todo.push(obj);

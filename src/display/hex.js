@@ -43,7 +43,7 @@ HexDisplayBackend.prototype.draw = function draw(data, clearBefore) {
 
   const px = [
     (x + 1) * this._spacingX,
-    y * this._spacingY + this._hexSize,
+    y * this._spacingY + this._hexSize
   ];
   if (this._options.transpose) { px.reverse(); }
 

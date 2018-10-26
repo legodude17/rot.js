@@ -348,7 +348,7 @@ export const _cache = {
   yellow: [255, 255, 0],
   lightyellow: [255, 255, 224],
   ivory: [255, 255, 240],
-  white: [255, 255, 255],
+  white: [255, 255, 255]
 };
 
 export function fromString(str) {

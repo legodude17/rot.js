@@ -33,7 +33,7 @@ IceyMaze.prototype.create = function create(callback) {
     [0, 0],
     [0, 0],
     [0, 0],
-    [0, 0],
+    [0, 0]
   ];
   do {
     cx = 1 + 2 * Math.floor(getUniform() * (width - 1) / 2);

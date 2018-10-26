@@ -1,5 +1,5 @@
 import {
-  tokenize, TYPE_TEXT, TYPE_BG, TYPE_FG, TYPE_NEWLINE,
+  tokenize, TYPE_TEXT, TYPE_BG, TYPE_FG, TYPE_NEWLINE
 } from '../text';
 
 import HexDisplayBackend from './hex';
@@ -50,7 +50,7 @@ export default function Display(options) {
     tileMap: {},
     tileSet: null,
     tileColorize: false,
-    termColor: 'xterm',
+    termColor: 'xterm'
   };
   Object.assign(defaultOptions, options);
   this.setOptions(defaultOptions);

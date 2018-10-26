@@ -18,13 +18,13 @@ export default function DiggerMap(width, height, options) {
     roomHeight: [3, 5], /* room minimum and maximum height */
     corridorLength: [3, 10], /* corridor minimum and maximum length */
     dugPercentage: 0.2, /* we stop after this percentage of level area has been dug out */
-    timeLimit: 1000, /* we stop after this much time has passed (msec) */
+    timeLimit: 1000 /* we stop after this much time has passed (msec) */
   };
   Object.assign(this._options, options);
 
   this._features = {
     Room: 4,
-    Corridor: 4,
+    Corridor: 4
   };
   this._featureAttempts = 20; /* how many times do we try to create a feature on a suitable wall */
   this._walls = {}; /* these are available for digging */

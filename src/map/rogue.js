@@ -21,7 +21,7 @@ export default function RogueMap(width, height, options) {
 
   this._options = {
     cellWidth: 3, // NOTE to self, these could probably work the same as the roomWidth/room Height values
-    cellHeight: 3, //     ie. as an array with min-max values for each direction....
+    cellHeight: 3 //     ie. as an array with min-max values for each direction....
   };
 
   Object.assign(this._options, options);
@@ -80,7 +80,7 @@ RogueMap.prototype._initRooms = function _initRooms() {
     this.rooms.push([]);
     for (let j = 0; j < this._options.cellHeight; j++) {
       this.rooms[i].push({
-        x: 0, y: 0, width: 0, height: 0, connections: [], cellx: i, celly: j,
+        x: 0, y: 0, width: 0, height: 0, connections: [], cellx: i, celly: j
       });
     }
   }

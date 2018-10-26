@@ -11,7 +11,7 @@ export const DIRS = {
     [0, -1],
     [1, 0],
     [0, 1],
-    [-1, 0],
+    [-1, 0]
   ],
   8: [
     [0, -1],
@@ -21,7 +21,7 @@ export const DIRS = {
     [0, 1],
     [-1, 1],
     [-1, 0],
-    [-1, -1],
+    [-1, -1]
   ],
   6: [
     [-1, -1],
@@ -29,8 +29,8 @@ export const DIRS = {
     [2, 0],
     [1, 1],
     [-1, 1],
-    [-2, 0],
-  ],
+    [-2, 0]
+  ]
 };
   /** Cancel key. */
 export const KEYS = {
@@ -340,5 +340,5 @@ export const KEYS = {
   /** Linux support for this keycode was added in Gecko 4.0. */
   EXECUTE: 43,
   /** Linux support for this keycode was added in Gecko 4.0. */
-  SLEEP: 95,
+  SLEEP: 95
 };

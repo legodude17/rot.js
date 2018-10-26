@@ -66,5 +66,5 @@ export function format(template, ...args) {
 }
 
 format.map = {
-  s: 'toString',
+  s: 'toString'
 };

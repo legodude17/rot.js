@@ -15,7 +15,7 @@ export default function Path(toX, toY, passableCallback, options) {
   this._fromY = null;
   this._passableCallback = passableCallback;
   this._options = {
-    topology: 8,
+    topology: 8
   };
   Object.assign(this._options, options);
 
@@ -29,7 +29,7 @@ export default function Path(toX, toY, passableCallback, options) {
       this._dirs[1],
       this._dirs[3],
       this._dirs[5],
-      this._dirs[7],
+      this._dirs[7]
     ];
   }
 }

@@ -9,7 +9,7 @@ import { DIRS } from '../rot';
 export default function FOV(lightPassesCallback, options) {
   this._lightPasses = lightPassesCallback;
   this._options = {
-    topology: 8,
+    topology: 8
   };
   Object.assign(this._options, options);
 }
@@ -42,7 +42,7 @@ FOV.prototype._getCircle = function _getCircle(cx, cy, r) {
       DIRS[8][7],
       DIRS[8][1],
       DIRS[8][3],
-      DIRS[8][5],
+      DIRS[8][5]
     ];
     break;
 
