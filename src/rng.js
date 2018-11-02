@@ -1,5 +1,7 @@
 let seed; let s0; let s1; let s2; let
-  c; let frac;
+  c;
+
+const FRAC = 2.3283064365386963e-10;
 
 /* eslint-disable no-bitwise */
 /**
@@ -16,13 +18,13 @@ export function setSeed(sed) {
   sed = (sed < 1 ? 1 / sed : sed);
 
   seed = sed;
-  s0 = (sed >>> 0) * frac;
+  s0 = (sed >>> 0) * FRAC;
 
   sed = (sed * 69069 + 1) >>> 0;
-  s1 = sed * frac;
+  s1 = sed * FRAC;
 
   sed = (sed * 69069 + 1) >>> 0;
-  s2 = sed * frac;
+  s2 = sed * FRAC;
 
   c = 1;
   return this;
@@ -32,7 +34,7 @@ export function setSeed(sed) {
   * @returns {float} Pseudorandom value [0,1), uniformly distributed
   */
 export function getUniform() {
-  const t = 2091639 * s0 + c * frac;
+  const t = 2091639 * s0 + c * FRAC;
   s0 = s1;
   s1 = s2;
   c = t | 0;
